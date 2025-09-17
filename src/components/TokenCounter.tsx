@@ -15,14 +15,14 @@ interface TokenStats {
 
 export const TokenCounter: React.FC = () => {
   const [stats, setStats] = useState<TokenStats>({
-    totalSupply: 37000000,
-    circulatingSupply: 36999266,
-    burned: 734,
-    claimed: 734,
-    holders: 200,
-    claimsProcessed: 734,
-    distributionProgress: 2.0,
-    mintAddress: '5se2cVMggFyibMqsJycmqH4N6dUY6z8iqLB8fjxrgqnh'
+    totalSupply: 0,
+    circulatingSupply: 0,
+    burned: 0,
+    claimed: 0,
+    holders: 0,
+    claimsProcessed: 0,
+    distributionProgress: 0,
+    mintAddress: 'G6ewSSUqzDhkBwMv3VK1HABybbqU5J6pHLVkzWXeiRvS'
   });
 
   const [isAnimating, setIsAnimating] = useState(false);

@@ -2,8 +2,9 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token';
 
 // DOOM Token Configuration from deployment
+export const DOOM_MINT_ADDRESS = 'G6ewSSUqzDhkBwMv3VK1HABybbqU5J6pHLVkzWXeiRvS';
 export const DOOM_TOKEN_CONFIG = {
-  mintAddress: new PublicKey('5se2cVMggFyibMqsJycmqH4N6dUY6z8iqLB8fjxrgqnh'),
+  mintAddress: new PublicKey(DOOM_MINT_ADDRESS),
   decimals: 9,
   symbol: 'DOOM',
   name: 'DOOM Protocol Token',
