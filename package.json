@@ -32,6 +32,9 @@
     "redis": "^5.8.2",
     "three": "^0.180.0"
   },
+  "engines": {
+    "node": ">=20.18.0"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
