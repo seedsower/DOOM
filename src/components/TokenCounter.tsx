@@ -22,7 +22,7 @@ export const TokenCounter: React.FC = () => {
     holders: 0,
     claimsProcessed: 0,
     distributionProgress: 0,
-    mintAddress: 'G6ewSSUqzDhkBwMv3VK1HABybbqU5J6pHLVkzWXeiRvS'
+    mintAddress: '48RRMbPXK1uuzJCo66yTVgRSZGARqSpE7FdXupwBbWoD'
   });
 
   const [isAnimating, setIsAnimating] = useState(false);

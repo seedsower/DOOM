@@ -2,7 +2,7 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token';
 
 // DOOM Token Configuration from deployment
-export const DOOM_MINT_ADDRESS = 'G6ewSSUqzDhkBwMv3VK1HABybbqU5J6pHLVkzWXeiRvS';
+export const DOOM_MINT_ADDRESS = '48RRMbPXK1uuzJCo66yTVgRSZGARqSpE7FdXupwBbWoD';
 export const DOOM_TOKEN_CONFIG = {
   mintAddress: new PublicKey(DOOM_MINT_ADDRESS),
   decimals: 9,
@@ -14,8 +14,11 @@ export const DOOM_TOKEN_CONFIG = {
 
 // Solana connection
 export const getConnection = () => {
-  const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.devnet.solana.com';
-  return new Connection(rpcUrl, 'confirmed');
+  const connection = new Connection(
+    process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com',
+    'confirmed'
+  );
+  return connection;
 };
 
 // Get token balance for a wallet

@@ -1,6 +1,6 @@
 import { Connection, PublicKey, Keypair } from '@solana/web3.js';
 import { mintTo, getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
-const DOOM_MINT_ADDRESS = 'G6ewSSUqzDhkBwMv3VK1HABybbqU5J6pHLVkzWXeiRvS';
+const DOOM_MINT_ADDRESS = '48RRMbPXK1uuzJCo66yTVgRSZGARqSpE7FdXupwBbWoD';
 
 // Server-side token minting function
 export async function mintDoomTokens(recipientWallet: string, amount: number = 734): Promise<{
