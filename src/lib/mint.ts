@@ -1,6 +1,21 @@
 import { Connection, PublicKey, Keypair } from '@solana/web3.js';
-import { mintTo, getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
+import { mintTo, getOrCreateAssociatedTokenAccount, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token';
+import fs from 'fs';
+import path from 'path';
+
 const DOOM_MINT_ADDRESS = '48RRMbPXK1uuzJCo66yTVgRSZGARqSpE7FdXupwBbWoD';
+const RPC_URL = 'https://api.mainnet-beta.solana.com';
+
+// Load mint authority keypair from Solana CLI config
+function loadMintAuthority(): Keypair {
+  try {
+    const keypairPath = path.join(process.env.HOME || '', '.config', 'solana', 'id.json');
+    const keypairData = JSON.parse(fs.readFileSync(keypairPath, 'utf8'));
+    return Keypair.fromSecretKey(new Uint8Array(keypairData));
+  } catch (error) {
+    throw new Error(`Failed to load mint authority keypair: ${error}`);
+  }
+}
 
 // Server-side token minting function
 export async function mintDoomTokens(recipientWallet: string, amount: number = 734): Promise<{
@@ -9,19 +24,50 @@ export async function mintDoomTokens(recipientWallet: string, amount: number = 7
   error?: string;
 }> {
   try {
-    // This would need to be implemented with proper server-side keypair management
-    // For now, return a mock success response
-    console.log(`Would mint ${amount} DOOM tokens to ${recipientWallet}`);
+    console.log(`🔥 Minting ${amount} DOOM tokens to ${recipientWallet}...`);
     
-    // In production, this would:
-    // 1. Load the mint authority keypair from secure storage
-    // 2. Create connection to Solana
-    // 3. Get or create associated token account
-    // 4. Mint tokens to the recipient
+    // Initialize connection and keypair
+    const connection = new Connection(RPC_URL, 'confirmed');
+    const mintAuthority = loadMintAuthority();
+    const mintPublicKey = new PublicKey(DOOM_MINT_ADDRESS);
+    const recipientPublicKey = new PublicKey(recipientWallet);
+    
+    // Check mint authority balance
+    const balance = await connection.getBalance(mintAuthority.publicKey);
+    if (balance < 1000000) { // Less than 0.001 SOL
+      throw new Error('Insufficient SOL balance for transaction fees');
+    }
+    
+    // Get or create associated token account for recipient
+    const recipientTokenAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      mintAuthority, // payer
+      mintPublicKey,
+      recipientPublicKey,
+      false, // allowOwnerOffCurve
+      'confirmed',
+      undefined,
+      TOKEN_2022_PROGRAM_ID
+    );
+    
+    // Mint tokens
+    const mintSignature = await mintTo(
+      connection,
+      mintAuthority, // payer
+      mintPublicKey,
+      recipientTokenAccount.address,
+      mintAuthority, // mint authority
+      amount * 1e9, // amount with decimals (9 decimals)
+      [],
+      { commitment: 'confirmed' },
+      TOKEN_2022_PROGRAM_ID
+    );
+    
+    console.log(`✅ Mint successful! Signature: ${mintSignature}`);
     
     return {
       success: true,
-      signature: 'mock_signature_' + Date.now()
+      signature: mintSignature
     };
   } catch (error) {
     console.error('Token minting failed:', error);
