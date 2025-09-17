@@ -45,6 +45,9 @@ next-env.d.ts
 /prisma/doom.db
 /prisma/doom.db-journal
 
+# Allow Prisma binaries for deployment
+!node_modules/.prisma/client/*
+
 # deployment info (contains sensitive keys)
 deployment-info.json
 
