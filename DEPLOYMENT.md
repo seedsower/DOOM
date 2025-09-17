@@ -22,7 +22,10 @@ NEXT_PUBLIC_SOLANA_NETWORK=devnet
 NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
 NEXT_PUBLIC_DOOM_MINT_ADDRESS=5se2cVMggFyibMqsJycmqH4N6dUY6z8iqLB8fjxrgqnh
 DATABASE_URL=file:./doom.db
+NODE_MODULES_CACHE=false
 ```
+
+**Important**: The `NODE_MODULES_CACHE=false` environment variable disables Netlify's dependency caching, which prevents npm cache issues during builds.
 
 ## Important Notes
 
@@ -58,6 +61,20 @@ The build process:
 - Check Node.js version (should be 18+)
 - Verify all dependencies are installed
 - Review build logs for specific errors
+
+### NPM Cache Issues
+If you encounter npm cache or `/dev/null` errors:
+1. **Environment Variable**: Set `NODE_MODULES_CACHE=false` in Netlify
+2. **Build Command**: Uses `npm cache clean --force && npm install && npm run build`
+3. **Clean .npmrc**: Avoid `/dev/null` references in npm configuration
+
+### Alternative Package Managers
+If npm issues persist, try switching to pnpm:
+```bash
+# In netlify.toml
+[build]
+  command = "corepack enable && pnpm install && pnpm run build"
+```
 
 ### Runtime Issues
 - Check browser console for client-side errors
