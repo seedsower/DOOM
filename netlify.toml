@@ -1,24 +1,15 @@
 [build]
-  publish = "out"
   command = "npm cache clean --force && npm install && npm run build"
 
 [build.environment]
   NODE_VERSION = "20.18.0"
   NODE_MODULES_CACHE = "false"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Use Netlify's Next.js runtime
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 [functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
   included_files = ["node_modules/.prisma/**"]
 
 [[headers]]
