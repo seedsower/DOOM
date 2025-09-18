@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 
 interface Question {
   id: string;
-  question: string;
+  questionText: string;
   hint?: string;
-  page?: number;
+  difficulty?: number;
 }
 
 interface VerificationQuizProps {
@@ -14,61 +14,36 @@ interface VerificationQuizProps {
   loading: boolean;
 }
 
-// Pool of verification questions based on literary references
-const QUESTION_POOL: Question[] = [
-  {
-    id: "q1",
-    question: "On page 154, what furniture held the Fools Crow paperback?",
-    hint: "Think about where old magazines might accumulate",
-    page: 154
-  },
-  {
-    id: "q2", 
-    question: "What corporate entity appears in the Ciba-Geigy dossier?",
-    hint: "A pharmaceutical giant with a dark history"
-  },
-  {
-    id: "q3",
-    question: "Unit 734 first appears in which chapter?",
-    hint: "The frequency of collapse has its origins"
-  },
-  {
-    id: "q4",
-    question: "What temperature begins human system failure?",
-    hint: "37 degrees in the metric system"
-  },
-  {
-    id: "q5",
-    question: "The Ghost of Fools Crow speaks in what frequency?",
-    hint: "The wavelength of destruction itself"
-  },
-  {
-    id: "q6",
-    question: "What binary pattern represents the number 37?",
-    hint: "Ones and zeros, chaos and order"
-  },
-  {
-    id: "q7",
-    question: "How many pages contain references to environmental collapse?",
-    hint: "More than you'd expect, fewer than you'd hope"
-  },
-  {
-    id: "q8",
-    question: "The bunker access code mentioned in chapter 12 is?",
-    hint: "The number of the beast, but for access"
-  }
-];
-
 export const VerificationQuiz: React.FC<VerificationQuizProps> = ({ onSubmit, loading }) => {
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [answer, setAnswer] = useState('');
   const [showHint, setShowHint] = useState(false);
   const [attempts, setAttempts] = useState(0);
+  const [isLoadingQuestion, setIsLoadingQuestion] = useState(true);
+  const [questionError, setQuestionError] = useState('');
+
+  const fetchRandomQuestion = async () => {
+    try {
+      setIsLoadingQuestion(true);
+      setQuestionError('');
+      const response = await fetch('/api/questions');
+      const data = await response.json();
+      
+      if (response.ok && data.question) {
+        setCurrentQuestion(data.question);
+      } else {
+        setQuestionError(data.error || 'Failed to load question');
+      }
+    } catch (error) {
+      console.error('Error fetching question:', error);
+      setQuestionError('Failed to load question');
+    } finally {
+      setIsLoadingQuestion(false);
+    }
+  };
 
   useEffect(() => {
-    // Select random question on component mount
-    const randomQuestion = QUESTION_POOL[Math.floor(Math.random() * QUESTION_POOL.length)];
-    setCurrentQuestion(randomQuestion);
+    fetchRandomQuestion();
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -80,17 +55,42 @@ export const VerificationQuiz: React.FC<VerificationQuizProps> = ({ onSubmit, lo
   };
 
   const handleNewQuestion = () => {
-    const randomQuestion = QUESTION_POOL[Math.floor(Math.random() * QUESTION_POOL.length)];
-    setCurrentQuestion(randomQuestion);
     setAnswer('');
     setShowHint(false);
+    fetchRandomQuestion();
   };
 
-  if (!currentQuestion) {
+  if (isLoadingQuestion) {
     return (
       <div className="text-center">
         <div className="animate-pulse text-terminal-green">
           Loading verification protocol...
+        </div>
+      </div>
+    );
+  }
+
+  if (questionError) {
+    return (
+      <div className="text-center">
+        <div className="text-blood-red mb-4">
+          Error loading question: {questionError}
+        </div>
+        <button
+          onClick={fetchRandomQuestion}
+          className="bg-terminal-green/20 border border-terminal-green px-4 py-2 rounded hover:bg-terminal-green/30 transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!currentQuestion) {
+    return (
+      <div className="text-center">
+        <div className="text-warning-amber">
+          No questions available
         </div>
       </div>
     );
@@ -104,9 +104,9 @@ export const VerificationQuiz: React.FC<VerificationQuizProps> = ({ onSubmit, lo
         <h3 className="text-lg font-bold text-warning-amber mb-2">
           VERIFICATION CHALLENGE #{attempts + 1}
         </h3>
-        {currentQuestion.page && (
+        {currentQuestion.difficulty && (
           <div className="text-xs text-glitch-blue mb-2">
-            Reference: Page {currentQuestion.page}
+            Difficulty: {currentQuestion.difficulty}/10
           </div>
         )}
       </div>
@@ -114,7 +114,7 @@ export const VerificationQuiz: React.FC<VerificationQuizProps> = ({ onSubmit, lo
       {/* Question */}
       <div className="bg-doom-black/50 p-4 border border-terminal-green rounded">
         <p className="text-terminal-green font-mono">
-          {currentQuestion.question}
+          {currentQuestion.questionText}
         </p>
       </div>
 
