@@ -11,63 +11,63 @@ function hashAnswer(answer) {
 // DOOM Protocol Questions and Answers
 const questions = [
   {
-    questionText: "What is the total supply of DOOM tokens?",
-    answer: "37000000",
-    hint: "Check the protocol metrics - it's a number that represents total collapse",
+    questionText: "How many pigs did the author smoke?",
+    answer: "6000",
+    hint: "Its in the authors forward",
     difficulty: 1
   },
   {
-    questionText: "What blockchain network does DOOM Protocol operate on?",
-    answer: "solana",
-    hint: "Fast, cheap, and built for the apocalypse",
-    difficulty: 1
-  },
-  {
-    questionText: "How many DOOM tokens do you receive per successful claim?",
-    answer: "734",
-    hint: "The number of the beast's cousin",
+    questionText: "What is the name of the authors car?",
+    answer: "black dragon",
+    hint: "Heat Haze",
     difficulty: 2
   },
   {
-    questionText: "What is the symbol of the DOOM token?",
-    answer: "doom",
-    hint: "It's literally in the name",
-    difficulty: 1
+    questionText: "What device does the repo man have?",
+    answer: "taser",
+    hint: "Piggy Lake",
+    difficulty: 2
   },
   {
-    questionText: "What program standard does DOOM token use?",
-    answer: "token-2022",
-    hint: "The newest token standard with metadata support",
-    difficulty: 3
+    questionText: "What hasn't the sun forgotten how to do?",
+    answer: "kill",
+    hint: "The definitive doomsday edition",
+    difficulty: 5
   },
   {
-    questionText: "What is the mint address of DOOM token on mainnet?",
-    answer: "48RRMbPXK1uuzJCo66yTVgRSZGARqSpE7FdXupwBbWoD",
-    hint: "Check the Solana Explorer - it's a long string starting with numbers",
+    questionText: "Who is the swiss voodoo merchant?",
+    answer: "carl jung",
+    hint: "christ on a crutch",
     difficulty: 4
   },
   {
-    questionText: "What does DOOM stand for in the protocol context?",
-    answer: "decentralized oracle of monetary",
-    hint: "Think about what a financial protocol might represent",
+    questionText: "Where was aunt mildred from?",
+    answer: "poughkeepsie",
+    hint: "Digital panopticon",
+    difficulty: 8
+  },
+  {
+    questionText: "What is the % debt to GDP ratio of the USA?",
+    answer: "133",
+    hint: "feeding the 37 trillion dollar beast",
     difficulty: 3
   },
   {
-    questionText: "What is the minimum token balance required to access the bunker?",
-    answer: "1",
-    hint: "Even one token grants you access to the collapse",
+    questionText: "What is the drunken Kaiser rattling?",
+    answer: "saber",
+    hint: "The Tariff Tango",
     difficulty: 2
   },
   {
-    questionText: "What is the name of the interface for advanced users?",
-    answer: "the judas interface",
-    hint: "Named after betrayal, found in the navigation",
+    questionText: "What is off-brand energy drink called?",
+    answer: "jitterjuice",
+    hint: "gas station in Asphalt Nightmares",
     difficulty: 2
   },
   {
-    questionText: "What file format is used for DOOM token metadata?",
-    answer: "json",
-    hint: "Standard web format for structured data",
+    questionText: "What does Fools Crow refer to when is mentions hollow?",
+    answer: "bone",
+    hint: "Fools crow chapter",
     difficulty: 2
   }
 ];
