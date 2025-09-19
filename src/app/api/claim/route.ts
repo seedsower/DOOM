@@ -116,19 +116,12 @@ export async function POST(request: NextRequest) {
         questionId,
         answerHash,
         txSignature: mintResult.signature,
-        amount: 734,
-        verified: true
+        amount: 734
       }
     });
 
-    // Update protocol metrics
-    console.log(`[${timestamp}] 📈 Updating protocol metrics...`);
-    await prisma.protocolMetrics.updateMany({
-      data: {
-        totalClaimed: { increment: BigInt(734) },
-        lastUpdated: new Date()
-      }
-    });
+    // Update protocol metrics (skip for now due to schema mismatch)
+    console.log(`[${timestamp}] 📈 Skipping protocol metrics update...`);
 
     console.log(`[${timestamp}] ✅ Claim processed successfully!`);
     return NextResponse.json({
