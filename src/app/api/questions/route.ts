@@ -59,6 +59,9 @@ async function seedQuestionsIfEmpty() {
 // GET /api/questions - Get a random active question
 export async function GET() {
   try {
+    // Test database connection first
+    await prisma.$connect();
+    
     // Seed questions if database is empty
     await seedQuestionsIfEmpty();
 
@@ -87,7 +90,15 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('Error fetching questions:', error);
-    return NextResponse.json({ error: 'Failed to fetch questions' }, { status: 500 });
+    console.error('Database error:', error);
+    
+    // Return detailed error for debugging
+    return NextResponse.json({ 
+      error: 'Failed to fetch questions',
+      details: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: new Date().toISOString()
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
