@@ -4,7 +4,8 @@ import fs from 'fs';
 import path from 'path';
 
 const DOOM_MINT_ADDRESS = '48RRMbPXK1uuzJCo66yTVgRSZGARqSpE7FdXupwBbWoD';
-const RPC_URL = 'https://api.mainnet-beta.solana.com';
+const RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 
+  'https://rpc.ankr.com/solana';
 
 // Load mint authority keypair from environment variable or Solana CLI config
 function loadMintAuthority(): Keypair {
