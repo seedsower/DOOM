@@ -10,7 +10,8 @@
   package = "@netlify/plugin-nextjs"
 
 [functions]
-  included_files = ["node_modules/.prisma/**"]
+  directory = "netlify/functions"
+  included_files = ["node_modules/.prisma/**", "prisma/**"]
 
 [[headers]]
   for = "/*"
