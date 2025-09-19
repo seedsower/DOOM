@@ -6,12 +6,23 @@ import path from 'path';
 const DOOM_MINT_ADDRESS = '48RRMbPXK1uuzJCo66yTVgRSZGARqSpE7FdXupwBbWoD';
 const RPC_URL = 'https://api.mainnet-beta.solana.com';
 
-// Load mint authority keypair from Solana CLI config
+// Load mint authority keypair from environment variable or Solana CLI config
 function loadMintAuthority(): Keypair {
   try {
+    // First try to load from environment variable (for production)
+    if (process.env.SOLANA_PRIVATE_KEY) {
+      const privateKeyArray = JSON.parse(process.env.SOLANA_PRIVATE_KEY);
+      return Keypair.fromSecretKey(new Uint8Array(privateKeyArray));
+    }
+    
+    // Fallback to Solana CLI config (for local development)
     const keypairPath = path.join(process.env.HOME || '', '.config', 'solana', 'id.json');
-    const keypairData = JSON.parse(fs.readFileSync(keypairPath, 'utf8'));
-    return Keypair.fromSecretKey(new Uint8Array(keypairData));
+    if (fs.existsSync(keypairPath)) {
+      const keypairData = JSON.parse(fs.readFileSync(keypairPath, 'utf8'));
+      return Keypair.fromSecretKey(new Uint8Array(keypairData));
+    }
+    
+    throw new Error('No keypair found. Set SOLANA_PRIVATE_KEY environment variable or configure Solana CLI.');
   } catch (error) {
     throw new Error(`Failed to load mint authority keypair: ${error}`);
   }
