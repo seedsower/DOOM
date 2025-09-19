@@ -16,7 +16,9 @@ export const DOOM_TOKEN_CONFIG = {
 export const getConnection = () => {
   // Use environment variable or fallback to more reliable RPC endpoints
   const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 
-    'https://rpc.ankr.com/solana'; // Ankr free tier (more reliable than Solana Labs)
+    'https://rpc.ankr.com/solana'; // Ankr free tier fallback
+  
+  console.log('Using Solana RPC URL:', rpcUrl.includes('api-key') ? rpcUrl.split('?')[0] + '?api-key=***' : rpcUrl);
   
   const connection = new Connection(rpcUrl, 'confirmed');
   return connection;
