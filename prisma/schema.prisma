@@ -7,8 +7,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./doom.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model TokenClaim {
@@ -19,7 +19,7 @@ model TokenClaim {
   claimedAt     DateTime @default(now())
   txSignature   String?  // Solana transaction signature
   amount        Int      @default(734)
-  verified      Boolean  @default(true)
+  metadata      Json?    // Additional claim metadata
   
   @@map("token_claims")
 }
@@ -39,25 +39,24 @@ model VerificationAttempt {
 
 model ProtocolMetrics {
   id              String   @id @default(cuid())
-  totalSupply     BigInt   @default(37000000)
-  circulatingSupply BigInt @default(37000000)
-  totalClaimed    BigInt   @default(0)
-  totalBurned     BigInt   @default(0)
-  uniqueHolders   Int      @default(0)
-  lastUpdated     DateTime @default(now())
+  totalClaims     Int      @default(0)
+  totalTokensMinted BigInt @default(0)
+  lastClaimAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   
   @@map("protocol_metrics")
 }
 
 model Question {
-  id          String @id @default(cuid())
+  id           String   @id @default(cuid())
   questionText String
-  answerHash  String // SHA-256 hash of correct answer
-  hint        String?
-  pageRef     Int?   // Page reference if applicable
-  difficulty  Int    @default(1) // 1-5 scale
-  isActive    Boolean @default(true)
-  createdAt   DateTime @default(now())
+  answerHash   String   // SHA-256 hash of correct answer
+  hint         String?
+  difficulty   Int      @default(1) // 1-10 scale
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   
   @@map("questions")
 }

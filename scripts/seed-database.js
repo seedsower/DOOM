@@ -99,14 +99,11 @@ async function seedDatabase() {
     if (!existingMetrics) {
       await prisma.protocolMetrics.create({
         data: {
-          totalSupply: BigInt(37000000),
-          circulatingSupply: BigInt(37000000),
-          totalClaimed: BigInt(0),
-          totalBurned: BigInt(0),
-          uniqueHolders: 0
+          totalClaims: 0,
+          totalTokensMinted: 0n,
         }
       });
-      console.log('📊 Initialized protocol metrics');
+      console.log('✅ Initialized protocol metrics');
     }
 
     console.log('🎯 Database seeding complete!');
