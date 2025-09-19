@@ -9,6 +9,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // Expected format: postgresql://neondb_owner:password@host/neondb?sslmode=require&channel_binding=require
 }
 
 model TokenClaim {
