@@ -13,6 +13,7 @@
     "@coral-xyz/anchor": "^0.31.1",
     "@metaplex-foundation/js": "^0.20.1",
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@netlify/neon": "^0.1.0",
     "@prisma/client": "^6.16.2",
     "@solana/spl-token": "^0.4.14",
     "@solana/spl-token-metadata": "^0.1.6",
