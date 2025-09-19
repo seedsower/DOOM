@@ -2,7 +2,7 @@
   command = "npm cache clean --force && npm install && npx prisma generate && npx prisma db push && node scripts/seed-database.js && npm run build"
 
 [build.environment]
-  NODE_VERSION = "20.18.0"
+  NODE_VERSION = "20.19.4"
   NODE_MODULES_CACHE = "false"
 
 # Use Netlify's Next.js runtime
