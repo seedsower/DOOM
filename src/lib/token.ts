@@ -1,5 +1,10 @@
 import { Connection, PublicKey } from '@solana/web3.js';
-import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token';
+import { 
+  getAssociatedTokenAddress, 
+  getAccount, 
+  TOKEN_2022_PROGRAM_ID,
+  getAssociatedTokenAddressSync
+} from '@solana/spl-token';
 
 // DOOM Token Configuration from deployment
 export const DOOM_MINT_ADDRESS = '48RRMbPXK1uuzJCo66yTVgRSZGARqSpE7FdXupwBbWoD';
@@ -33,18 +38,29 @@ export async function getTokenBalance(walletAddress: PublicKey): Promise<number>
     try {
       const connection = getConnection();
       
-      // Get the associated token account address
-      const associatedTokenAddress = await getAssociatedTokenAddress(
+      // Get the associated token account address for Token-2022
+      const associatedTokenAddress = getAssociatedTokenAddressSync(
         DOOM_TOKEN_CONFIG.mintAddress,
-        walletAddress
+        walletAddress,
+        false, // allowOwnerOffCurve
+        TOKEN_2022_PROGRAM_ID // Use Token-2022 program
       );
       
-      // Get the token account info
-      const tokenAccount = await getAccount(connection, associatedTokenAddress);
+      console.log(`Checking Token-2022 balance for wallet: ${walletAddress.toString()}`);
+      console.log(`Associated token account: ${associatedTokenAddress.toString()}`);
+      
+      // Get the token account info using Token-2022 program
+      const tokenAccount = await getAccount(
+        connection, 
+        associatedTokenAddress,
+        'confirmed',
+        TOKEN_2022_PROGRAM_ID // Specify Token-2022 program
+      );
       
       // Convert balance from smallest unit to tokens
       const balance = Number(tokenAccount.amount) / Math.pow(10, DOOM_TOKEN_CONFIG.decimals);
       
+      console.log(`Token balance found: ${balance} DOOM`);
       return balance;
     } catch (error: any) {
       lastError = error;
@@ -60,7 +76,9 @@ export async function getTokenBalance(walletAddress: PublicKey): Promise<number>
       
       // If token account doesn't exist, return 0 immediately
       if (error.message?.includes('could not find account') || 
-          error.message?.includes('Invalid param: could not find account')) {
+          error.message?.includes('Invalid param: could not find account') ||
+          error.message?.includes('TokenAccountNotFoundError')) {
+        console.log('Token account not found - wallet has 0 DOOM tokens');
         return 0;
       }
     }
@@ -84,10 +102,12 @@ export function formatTokenAmount(amount: number): string {
   return amount.toLocaleString();
 }
 
-// Get token account address for a wallet
+// Get token account address for a wallet using Token-2022
 export async function getTokenAccountAddress(walletAddress: PublicKey): Promise<PublicKey> {
-  return await getAssociatedTokenAddress(
+  return getAssociatedTokenAddressSync(
     DOOM_TOKEN_CONFIG.mintAddress,
-    walletAddress
+    walletAddress,
+    false,
+    TOKEN_2022_PROGRAM_ID
   );
 }

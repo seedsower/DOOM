@@ -1,5 +1,13 @@
-import { Connection, PublicKey, Keypair } from '@solana/web3.js';
-import { mintTo, getOrCreateAssociatedTokenAccount, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token';
+import { Connection, PublicKey, Keypair, Transaction } from '@solana/web3.js';
+import { 
+  createMintToInstruction, 
+  getAssociatedTokenAddressSync, 
+  createAssociatedTokenAccountInstruction, 
+  getAccount,
+  TOKEN_2022_PROGRAM_ID,
+  getOrCreateAssociatedTokenAccount,
+  mintTo
+} from '@solana/spl-token';
 import fs from 'fs';
 import path from 'path';
 
