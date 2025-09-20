@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { GlitchText } from '@/components/GlitchText';
+import { PoolManager } from '@/components/PoolManager';
 
 interface MarketData {
   price: number;
@@ -258,6 +259,9 @@ export default function MarketPage() {
             </div>
           </div>
         </section>
+
+        {/* Pool Management */}
+        <PoolManager />
 
         {/* Trading Links */}
         <section className="terminal-window">
